@@ -1,9 +1,7 @@
 """
 RabbitMQ consumer worker — dispatches notifications from the queue.
 
-Run with: python -m app.queue.worker
-
-Students: implement the retry delay logic and the actual channel dispatch.
+Updated: Implements PostgreSQL status tracking and retry delay logic.
 """
 import asyncio
 import json
@@ -19,10 +17,13 @@ from app.config import settings
 from app.queue.producer import publish
 from app.queue.schemas import NotifyPayload
 
+# Import your database utility here
+from app.database import update_job_status 
+
 logger = logging.getLogger(__name__)
 
-RETRY_DELAYS = {1: 0, 2: 60, 3: 300, 4: 1800}  # seconds before retry
-
+# Mapping attempts to delay in seconds: 1st retry (0s), 2nd (60s), 3rd (300s)
+RETRY_DELAYS = {1: 0, 2: 60, 3: 300, 4: 1800} 
 
 async def dispatch(payload: NotifyPayload) -> None:
     """Call the correct channel sender based on payload.channel."""
@@ -35,39 +36,48 @@ async def dispatch(payload: NotifyPayload) -> None:
                 html_body=payload.html_body,
             )
         case "sms":
-            send_sms(to=payload.recipient, body=payload.body)
+            await send_sms(to=payload.recipient, body=payload.body)
         case "push":
-            send_push(
+            await send_push(
                 device_token=payload.recipient,
                 title=payload.title or "CixioHub",
                 body=payload.body,
                 data=payload.data,
             )
         case "whatsapp":
-            send_whatsapp(to=payload.recipient, body=payload.body)
+            await send_whatsapp(to=payload.recipient, body=payload.body)
         case _:
             raise ValueError(f"Unknown channel: {payload.channel}")
-
 
 async def process_message(message: aio_pika.IncomingMessage) -> None:
     async with message.process(requeue=False):
         payload = NotifyPayload(**json.loads(message.body))
+        
+        # Mark as PROCESSING in PostgreSQL
+        await update_job_status(payload.job_id, status="PROCESSING")
+        
         try:
             await dispatch(payload)
             logger.info("Sent %s to %s (job %s)", payload.channel, payload.recipient, payload.job_id)
-            # TODO: update notification_jobs table — increment sent count
+            
+            # Update DB to DONE
+            await update_job_status(payload.job_id, status="DONE", progress=100)
+            
         except Exception as exc:
             logger.warning("Failed attempt %d for job %s: %s", payload.attempt, payload.job_id, exc)
+            
             if payload.attempt < payload.max_attempts:
-                # Re-enqueue with incremented attempt count
-                # TODO: add delay (publish after RETRY_DELAYS[payload.attempt] seconds)
                 payload.attempt += 1
+                # Apply retry delay
+                delay = RETRY_DELAYS.get(payload.attempt, 300)
+                await asyncio.sleep(delay) 
                 await publish(payload)
             else:
                 logger.error("Permanently failed job %s channel %s", payload.job_id, payload.channel)
-                # TODO: update notification_jobs table — increment failed count
-                # TODO: publish to *.failed queue for investigation
-
+                # Update DB to FAILED
+                await update_job_status(payload.job_id, status="FAILED", error_message=str(exc))
+                # Publish to failed queue for investigation
+                await publish(payload, queue_name=f"{payload.channel}.process.failed")
 
 async def run_consumer() -> None:
     connection = await aio_pika.connect_robust(settings.rabbitmq_url)
@@ -80,8 +90,7 @@ async def run_consumer() -> None:
             await queue.consume(process_message)
 
         logger.info("Notify worker started. Waiting for messages...")
-        await asyncio.Future()  # run forever
-
+        await asyncio.Future() 
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)

@@ -1,6 +1,6 @@
 ---
 name: "notify-agent"
-description: "Thin coordinator that routes requests to single-task agents: notify-channel, notify-queue, notify-api, notify-worker, notify-planner, notify-code-reviewer."
+description: "Thin coordinator that routes requests to single-task agents: notify-channel, notify-queue, notify-api, notify-worker, notify-mcp, notify-rag, notify-plugin, notify-ai-workflow, notify-monitoring, notify-planner, notify-code-reviewer."
 handoffs:
   - label: Create/Update Channel
     agent: notify-channel
@@ -17,6 +17,26 @@ handoffs:
   - label: Create/Update Worker
     agent: notify-worker
     prompt: Implement the worker task described above.
+    send: false
+  - label: Create/Update MCP Tool
+    agent: notify-mcp
+    prompt: Implement the MCP tool task described above.
+    send: false
+  - label: Create/Update RAG Pipeline
+    agent: notify-rag
+    prompt: Implement the RAG pipeline task described above.
+    send: false
+  - label: Create/Update Plugin
+    agent: notify-plugin
+    prompt: Implement the plugin task described above.
+    send: false
+  - label: Create/Update AI Workflow
+    agent: notify-ai-workflow
+    prompt: Implement the AI workflow task described above.
+    send: false
+  - label: Create/Update Monitoring
+    agent: notify-monitoring
+    prompt: Implement the monitoring task described above.
     send: false
   - label: Generate Implementation Plan
     agent: notify-planner
@@ -38,6 +58,11 @@ This agent does not implement tasks directly. It identifies the task type and ha
 | Configuring/inspecting RabbitMQ queues, consumers, retry routing | `notify-queue` agent |
 | Creating/updating FastAPI REST endpoints in `app/routers/` | `notify-api` agent |
 | Creating/updating queue workers in `app/workers/` | `notify-worker` agent |
+| Creating/updating MCP server tools in `mcp_hub_notify/` | `notify-mcp` agent |
+| Creating/updating RAG pipeline components (ingestion, chunking, embeddings) | `notify-rag` agent |
+| Creating/updating plugin framework (hooks, rules, skills, agents) | `notify-plugin` agent |
+| Creating/updating AI workflow orchestration pipelines | `notify-ai-workflow` agent |
+| Creating/updating monitoring, tracking, and observability features | `notify-monitoring` agent |
 | Generating an implementation plan before coding | `notify-planner` agent |
 | Reviewing code changes before merge | `notify-code-reviewer` agent |
 

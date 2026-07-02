@@ -1,6 +1,6 @@
 ---
 name: notify-agent-skills
-description: "Skills catalog for the hub_notify repository. Six single-task agents handle specific domains: channel modules, queue configuration, API endpoints, workers, planning, and code review."
+description: "Skills catalog for the hub_notify repository. Eleven single-task agents handle specific domains: MCP tools, RAG pipeline, plugin framework, AI workflow, monitoring, channel modules, queue configuration, API endpoints, workers, planning, and code review."
 ---
 
 # Notify Agent — Skills Catalog
@@ -45,6 +45,43 @@ This document catalogs all single-task agents available for the `hub_notify` rep
 - **Scope:** Read-only — produces categorized review reports
 - **Example prompt:** *"Review this PR for correctness and security before merge."*
 
+### 7. notify-mcp
+- **File:** `notify-mcp.agent.md` / Prompt: `notify-mcp-prompt.prompt.md`
+- **Single task:** Create or update MCP server tools and configuration
+- **Scope:** `mcp_hub_notify/`, `mcp-config.json`, `.vscode/mcp.json`
+- **Example prompt:** *"Add a discoverDatabaseTables tool to the MCP server."*
+
+### 8. notify-rag
+- **File:** `notify-rag.agent.md` / Prompt: `notify-rag-prompt.prompt.md`
+- **Single task:** Create or update RAG pipeline components (document ingestion, chunking, embeddings, vector storage)
+- **Scope:** `app/workers/rag_worker.py`, `app/workers/file_worker.py`, ChromaDB, embedding services
+- **Example prompt:** *"Update the RAG worker to use semantic chunking with overlap."*
+
+### 9. notify-plugin
+- **File:** `notify-plugin.agent.md` / Prompt: `notify-plugin-prompt.prompt.md`
+- **Single task:** Create or update plugin framework components (metadata, hooks, rules, skills, agents)
+- **Scope:** `plugin/` directory, plugin metadata, hook/rule/skill definitions
+- **Example prompt:** *"Create a notify-audit plugin with a post-send hook."*
+
+### 10. notify-ai-workflow
+- **File:** `notify-ai-workflow.agent.md` / Prompt: `notify-ai-workflow-prompt.prompt.md`
+- **Single task:** Create or update AI workflow orchestration pipelines using RabbitMQ queue chaining
+- **Scope:** `app/queue/`, `app/workers/` (AI workers), `app/services/` (AI clients)
+- **Example prompt:** *"Create a multi-stage AI workflow that ingests, analyzes, and enriches documents."*
+
+### 11. notify-monitoring
+- **File:** `notify-monitoring.agent.md` / Prompt: `notify-monitoring-prompt.prompt.md`
+- **Single task:** Create or update notification monitoring, tracking, and observability features
+- **Scope:** `app/workers/analytics_worker.py`, delivery tracking, metrics, alerting
+- **Example prompt:** *"Add delivery confirmation tracking to the email channel."*
+
+### Infrastructure Skills (reusable guides in `.github/skills/`)
+- `notify-mcp` — MCP server tool creation and configuration
+- `notify-rag` — RAG pipeline ingestion, chunking, embeddings, vector storage
+- `notify-plugin` — Plugin framework creation (metadata, hooks, rules, skills, agents)
+- `notify-ai-workflow` — AI workflow orchestration via RabbitMQ queue chaining
+- `notify-monitoring` — Delivery tracking, metrics collection, alerting
+
 ## Safety policies (all agents)
 
 - Never request or accept raw secrets in chat messages
@@ -54,8 +91,11 @@ This document catalogs all single-task agents available for the `hub_notify` rep
 
 ## Maintenance notes
 
-Keep `SKILLS.md` aligned with all `.agent.md` files and `.prompt.md` files. When adding a new agent:
+Keep `SKILLS.md` aligned with all `.agent.md` files, `.prompt.md` files, and `.github/skills/` files. When adding a new agent:
 1. Create `<agent-name>.agent.md` in `.github/agents/`
 2. Create `<agent-name>-prompt.prompt.md` in `.github/prompts/` (if the agent uses a prompt)
-3. Update this `SKILLS.md` catalog
-4. Update `copilot-instructions.md` agent list
+3. Create `.github/skills/<agent-name>/SKILL.md` (reusable skill guide)
+4. Update this `SKILLS.md` catalog
+5. Update `copilot-instructions.md` agent list
+6. Update `notify-agent.agent.md` with handoff entry
+7. Update `notify-prompt.prompt.md` with routing row

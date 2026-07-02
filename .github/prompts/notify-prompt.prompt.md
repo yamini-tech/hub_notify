@@ -14,6 +14,11 @@ This coordinator does NOT implement tasks directly. It identifies the task type 
 | Configure/inspect RabbitMQ queues | `notify-queue` | `notify-queue-prompt.prompt.md` |
 | Create/update FastAPI endpoints | `notify-api` | `notify-api-prompt.prompt.md` |
 | Create/update queue workers | `notify-worker` | `notify-worker-prompt.prompt.md` |
+| Create/update MCP server tools | `notify-mcp` | `notify-mcp-prompt.prompt.md` |
+| Create/update RAG pipeline components | `notify-rag` | `notify-rag-prompt.prompt.md` |
+| Create/update plugin framework | `notify-plugin` | `notify-plugin-prompt.prompt.md` |
+| Create/update AI workflow orchestration | `notify-ai-workflow` | `notify-ai-workflow-prompt.prompt.md` |
+| Create/update monitoring and tracking | `notify-monitoring` | `notify-monitoring-prompt.prompt.md` |
 | Generate an implementation plan | `notify-planner` | `notify-planner.agent.md` |
 | Review code before merge | `notify-code-reviewer` | `notify-code-reviewer.agent.md` |
 
