@@ -21,7 +21,7 @@ This agent does NOT handle:
 - Validating channel payloads against models → use `notify-validator`
 - API endpoints → use `notify-api`
 - Background workers → use `notify-worker`
-- Planning or review → use `notify-planner` or `notify-code-reviewer`
+- Review → use `notify-code-reviewer`
 
 ## Inputs
 

@@ -24,7 +24,7 @@ This agent does NOT handle:
 - Retry optimization → use `notify-retry`
 - Circuit breaker logic → use `notify-circuit-breaker`
 - Payload validation → use `notify-validator`
-- Planning or review → use `notify-planner` or `notify-code-reviewer`
+- Review → use `notify-code-reviewer`
 
 ## Inputs
 

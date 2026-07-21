@@ -20,7 +20,7 @@ This agent does NOT handle:
 - Channel provider implementations → use `notify-channel`
 - Queue configuration → use `notify-queue`
 - Background worker logic → use `notify-worker`
-- Planning or review → use `notify-planner` or `notify-code-reviewer`
+- Review → use `notify-code-reviewer`
 
 ## Inputs
 

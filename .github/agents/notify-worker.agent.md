@@ -20,7 +20,7 @@ This agent does NOT handle:
 - Channel provider implementations → use `notify-channel`
 - Queue topology or routing → use `notify-queue`
 - HTTP API endpoints → use `notify-api`
-- Planning or review → use `notify-planner` or `notify-code-reviewer`
+- Review → use `notify-code-reviewer`
 
 ## Inputs
 

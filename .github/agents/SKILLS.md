@@ -33,12 +33,6 @@ This document catalogs all single-task agents available for the `hub_notify` rep
 - **Scope:** `app/workers/<name>_worker.py`, `app/workers/__init__.py`, `app/main.py`
 - **Example prompt:** *"Create a Slack worker that consumes from slack.process and calls the Slack channel."*
 
-### 5. notify-planner
-- **File:** `notify-planner.agent.md`
-- **Single task:** Generate implementation plans before any code work begins
-- **Scope:** Read-only — produces Markdown plan documents only
-- **Example prompt:** *"Plan adding a rate-limiting layer to the notify API endpoint."*
-
 ### 6. notify-code-reviewer
 - **File:** `notify-code-reviewer.agent.md`
 - **Single task:** Review code changes across correctness, readability, architecture, security, and performance

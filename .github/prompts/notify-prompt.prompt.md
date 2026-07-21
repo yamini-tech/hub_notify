@@ -14,7 +14,6 @@ This coordinator does NOT implement tasks directly. It identifies the task type 
 | Configure/inspect RabbitMQ queues | `notify-queue` | `notify-queue-prompt.prompt.md` |
 | Create/update FastAPI endpoints | `notify-api` | `notify-api-prompt.prompt.md` |
 | Create/update queue workers | `notify-worker` | `notify-worker-prompt.prompt.md` |
-| Generate an implementation plan | `notify-planner` | `notify-planner.agent.md` |
 | Review code before merge | `notify-code-reviewer` | `notify-code-reviewer.agent.md` |
 
 If the request spans multiple domains, ask the user to break it into single-task prompts.

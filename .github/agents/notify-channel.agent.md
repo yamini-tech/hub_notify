@@ -19,7 +19,7 @@ This agent does NOT handle:
 - RabbitMQ queue configuration or consumers → use `notify-queue`
 - API endpoints → use `notify-api`
 - Background workers → use `notify-worker`
-- Planning or review → use `notify-planner` or `notify-code-reviewer`
+- Review → use `notify-code-reviewer`
 
 ## Inputs
 
